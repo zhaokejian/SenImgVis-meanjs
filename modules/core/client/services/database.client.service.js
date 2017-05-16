@@ -1,12 +1,5 @@
-(function() {
+(function(app) {
   'use strict';
-
-  // Create the Socket.io wrapper service
-  angular
-    .module('core')
-    .factory('databese', database);
-
-  // database.$inject = [$rootScope];
 
   // Return a function to search word
   let SearchWord = function(words) {
@@ -32,30 +25,33 @@
     };
   };
 
-  function database() {
-    let images, words;
-    let database = {};
-    let searchImage, searchWord;
-    database.configure = function(data) {
-      images = data.image;
-      words = data.word;
-      searchImage = SearchImage(images);
-      searchWord = SearchWord(words);
-    }
-    database.searchImage = function(ids) {
-      let result = [];
-      for (let id of ids) {
-        result.push(searchImage(id));
+  angular
+    .module(app.applicationModuleName)
+    .factory('databese', function() {
+      let images, words;
+      let database = {};
+      let searchImage, searchWord;
+      database.configure = function(data) {
+        images = data.image;
+        words = data.word;
+        searchImage = SearchImage(images);
+        searchWord = SearchWord(words);
       }
-      return result.filter(d => d != undefined);
-    };
-    database.searchWord = function(words) {
-      let result = [];
-      for (let word of words) {
-        result.push(searchWord(word));
+      database.searchImage = function(ids) {
+        let result = [];
+        for (let id of ids) {
+          result.push(searchImage(id));
+        }
+        return result.filter(d => d != undefined);
+      };
+      database.searchWord = function(words) {
+        let result = [];
+        for (let word of words) {
+          result.push(searchWord(word));
+        }
+        return result.filter(d => d != undefined);
       }
-      return result.filter(d => d != undefined);
-    }
-    return database;
-  }
-}());
+      return database;
+    });
+
+}(ApplicationConfiguration));
