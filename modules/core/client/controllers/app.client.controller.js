@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  class HomeController {
+  class AppController {
     constructor($scope, $http, event, database) {
       this.$http = $http;
       this.event = event;
@@ -105,6 +105,6 @@
 
   angular
     .module(app.applicationModuleName)
-    .controller('HomeController', ['$scope','$http', myevent, database, HomeController]);
+    .controller('AppController', ['$scope','$http', 'database', 'myevent', AppController]);
 
 }(ApplicationConfiguration));

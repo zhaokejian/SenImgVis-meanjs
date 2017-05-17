@@ -1,5 +1,4 @@
 (function(app) {
-  'use strict';
 
   // Return a function to search word
   let SearchWord = function(words) {
@@ -27,7 +26,7 @@
 
   angular
     .module(app.applicationModuleName)
-    .factory('databese', function() {
+    .factory('database', function() {
       let images, words;
       let database = {};
       let searchImage, searchWord;
@@ -54,4 +53,4 @@
       return database;
     });
 
-}(ApplicationConfiguration));
+}(ApplicationConfiguration))

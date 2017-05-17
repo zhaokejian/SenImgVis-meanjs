@@ -3,7 +3,7 @@
 
   angular
     .module(app.applicationModuleName)
-    .factory('myevent', [$rootScope, function myevent($rootScope) {
+    .factory('myevent', ['$rootScope', function myevent($rootScope) {
       let myevent = {};
       myevent.emit = function(evt, msg) {
         $rootScope.$broadcast(evt, msg);
