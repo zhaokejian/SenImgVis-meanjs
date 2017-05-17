@@ -105,6 +105,6 @@
 
   angular
     .module(app.applicationModuleName)
-    .controller('AppController', ['$scope','$http', 'database', 'myevent', AppController]);
+    .controller('AppController', ['$scope','$http', 'database', 'event', AppController]);
 
 }(ApplicationConfiguration));
