@@ -8,7 +8,9 @@ module.exports = {
     googleAnalyticsTrackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID || 'GOOGLE_ANALYTICS_TRACKING_ID'
   },
   db: {
-    promise: global.Promise
+    uri: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || '10.76.2.57') + 'imagevis',
+    // Enable mongoose debug mode
+    debug: process.env.MONGODB_DEBUG || false
   },
   port: process.env.PORT || 3010,
   host: process.env.HOST || '0.0.0.0',
