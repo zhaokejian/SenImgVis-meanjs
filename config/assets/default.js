@@ -24,6 +24,9 @@ module.exports = {
         'public/lib/angular-ui-notification/dist/angular-ui-notification.js',
         'public/lib/angular-ui-router/release/angular-ui-router.js',
         'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
+        'public/lib/d3/d3.min.js',
+        'public/lib/density-clustering/clustering.min.js',
+        'public/lib/vptree/vptree.min.js',
         // endbower
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']
