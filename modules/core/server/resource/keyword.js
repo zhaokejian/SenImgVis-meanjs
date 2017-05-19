@@ -724,4 +724,4 @@ let keyword = [
     "racquets"
 ];
 
-export default keyword;
+module.exports = keyword;

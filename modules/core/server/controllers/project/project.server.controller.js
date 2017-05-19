@@ -72,7 +72,7 @@ function handleError(res, statusCode) {
   };
 }
 
-export function DefaultProjection(req, res) {
+exports.DefaultProjection = function(req, res) {
   let image_projection = { 'id': 1, 'origin_constructors': 1, 'caption': 1, 'index': 1, 'solution': 1 };
   let word_projection = { 'word': 1, 'origin_constructors': 1, 'index': 1, 'solution': 1 };
   let data = {};
@@ -106,7 +106,7 @@ export function DefaultProjection(req, res) {
     .catch(handleError(res));
 };
 
-export function LowProjection(req, res) {
+exports.LowProjection = function(req, res) {
   let image_projection = { 'id': 1, 'origin_constructors': 1, 'caption': 1, 'index': 1, 'colorhistogram_solution_step1': 1 };
   let word_projection = { 'word': 1, 'origin_constructors': 1, 'index': 1, 'colorhistogram_solution_step1': 1 };
   let data = {};
@@ -140,7 +140,7 @@ export function LowProjection(req, res) {
     .catch(handleError(res));
 };
 
-export function CnnProjection(req, res) {
+exports.CnnProjection = function(req, res) {
   let image_projection = { 'id': 1, 'origin_constructors': 1, 'caption': 1, 'index': 1, 'solution_step1': 1 };
   let word_projection = { 'word': 1, 'origin_constructors': 1, 'index': 1, 'solution_step1': 1 };
   let data = {};
@@ -173,7 +173,7 @@ export function CnnProjection(req, res) {
     .catch(handleError(res));
 };
 
-export function ReconstructWord(req, res) {
+exports.ReconstructWord = function(req, res) {
   let word = req.params.word;
   let query = req.query;
   if (query.parents) {
@@ -238,7 +238,7 @@ export function ReconstructWord(req, res) {
     .catch(handleError(res));
 }
 
-export function ReconstructImage(req, res) {
+exports.ReconstructImage = function(req, res) {
   let query = req.query;
   if (query.parents) {
     if (query.parents instanceof Array) {

@@ -66,7 +66,7 @@ function handleError(res, statusCode) {
 }
 
 // Gets a list of Words
-export function index(req, res) {
+exports.index = function(req, res) {
   let projection = { '_id': 0, 'word': 1, 'solution': 1, 'index': 1 };
   let isKeyword = IsKeyword();
   return Word.find(null, projection).exec()
@@ -80,7 +80,7 @@ export function index(req, res) {
 }
 
 // Gets a single image from the DB
-export function show(req, res) {
+exports.show = function(req, res) {
   let id = req.params.id;
   let filter = { 'word': req.params.id };
   let projection = { 'word': 1, 'constructors': 1, 'children': 1, 'index': 1 };
@@ -96,7 +96,7 @@ export function show(req, res) {
     .catch(handleError(res));
 }
 
-export function getChildren(req, res) {
+exports.getChildren = function(req, res) {
   let projection = { 'word': 1, 'origin_constructors': 1, 'children': 1, 'index': 1 };
   console.log('children');
   return Word.find(null, projection).exec()

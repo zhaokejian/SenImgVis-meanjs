@@ -388,4 +388,4 @@ result.reConstructImage = function (wordPositions_, imageConstructors) {
   return { image: imagePositions_, word: wordPositions_ };
 }
 
-export default result;
+module.exports = result;

@@ -257,4 +257,4 @@ let Xto2d = function(X_I, X_C, X_W, N_I, N_W, D, max_iter, weight=0.5) {
   return Y;
 };
 
-export default Xto2d;
+module.exports = Xto2d;

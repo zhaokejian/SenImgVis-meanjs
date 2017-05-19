@@ -56,7 +56,7 @@ function handleError(res, statusCode) {
 }
 
 // Gets a list of Images
-export function index(req, res) {
+exports.index = function(req, res) {
   let projection = { '_id': 0, 'id': 1, 'solution': 1, 'caption': 1, 'index': 1 };
   return Image.find(null, projection).exec()
     .then(respondWithResult(res))
@@ -64,7 +64,7 @@ export function index(req, res) {
 }
 
 // Gets a single image from the DB
-export function show(req, res) {
+exports.show = function(req, res) {
   let filter = { 'id': req.params.id };
   let projection = { 'id': 1, 'constructors': 1 };
   return Image.find(filter, projection).exec()
