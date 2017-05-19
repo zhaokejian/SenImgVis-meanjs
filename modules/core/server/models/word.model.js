@@ -15,4 +15,4 @@ var WordSchema = new mongoose.Schema({
   solution_step1: [Number]
 }, { collection: 'word' });
 
-mongoose.model('Word', WordSchema);
+module.exports = mongoose.model('Word', WordSchema);

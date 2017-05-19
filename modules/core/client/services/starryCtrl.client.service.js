@@ -9,8 +9,7 @@
 
   // import scaleTransform from '../../util/scaletransform';
   // import clustering from '../../util/clustering';
-  // import Singular from '../../resource/singular';
-  var Singular = require('../../resource/singular');
+  // import Singular from '../resource/singular';
   // import VPTree from '../../util/vptree';
   // import mathFactory from '../../util/mathfactory';
   // import collision from '../../util/collision';
@@ -37,27 +36,6 @@
     return function(id) {
       if (!image2id.hasOwnProperty(id)) return;
       return images[image2id[id]];
-    };
-  };
-
-  // Return a function to brush neighboors of a point
-  let Brush = function(node) {
-    let points = [];
-    for (let i = 0; i < node.length; i++) {
-      let d = node[i];
-      if (d._data_) {
-        points.push(d._data_.solution);
-      }
-    }
-    let VPTree = vptree.build(points, maths.Euclidean_distance);
-    // Brush by a center and radius
-    return function(p, radius) {
-      let result = VPTree.search(p, Infinity, radius);
-      result.sort((a, b) => a.dist - b.dist);
-      for (let obj of result) {
-        obj.data = node[obj.i];
-      }
-      return result;
     };
   };
 
@@ -124,7 +102,8 @@
 
   angular
     .module(app.applicationModuleName)
-    .factory('starryCtrl', ['scaleTransform', 'cluster', 'maths', 'collision', 'draw', function(scaleTransform, cluster, maths, collision, Draw) {
+    .factory('starryCtrl', [ 'scaleTransform', 'cluster', 'maths', 'collision', 'draw', 'singular',
+    function(scaleTransform, cluster, maths, collision, Draw, Singular) {
       let backcanvas, forecanvas, svg;
       let _xdomain, _ydomain;
       let _xscale, _yscale;
@@ -140,6 +119,27 @@
       let _keywordProportion = [0.15, 0.15, 0.6, 1, 1];
       let _zoomProportion = [1, 2, 4, 8, 16];
       let _zoomManager = {};
+
+      // Return a function to brush neighboors of a point
+      let Brush = function(node) {
+        let points = [];
+        for (let i = 0; i < node.length; i++) {
+          let d = node[i];
+          if (d._data_) {
+            points.push(d._data_.solution);
+          }
+        }
+        let VPTree = VPTreeFactory.build(points, maths.Euclidean_distance);
+        // Brush by a center and radius
+        return function(p, radius) {
+          let result = VPTree.search(p, Infinity, radius);
+          result.sort((a, b) => a.dist - b.dist);
+          for (let obj of result) {
+            obj.data = node[obj.i];
+          }
+          return result;
+        };
+      };
 
       let starry = {
         // Configure data
@@ -174,7 +174,7 @@
           _originScale = [_xscale.copy(), _yscale.copy()];
           starry.clear(forecanvas.node());
           starry.clear(backcanvas.node());
-          starry.computeGroups();
+          // starry.computeGroups();
           starry.renderInit();
         },
         init: function() {
@@ -482,18 +482,17 @@
           });
 
           let color = ColorGenerator();
-          // let labelColor = color();
-          let groups = starry.groups().image;
+          // let groups = starry.groups().image;
           let imagesElem = starry.virtualElements().image;
-          for (let group of groups) {
-            let labelColor = color();
-            group = group.map(d => imagesElem[d]);
-            for (let elem of group) {
-              elem.style.fillStyle = labelColor;
-              elem.style.opacity = 0.25;
-            }
-            // util.drawContour(forecanvas.node(), group);
-          }
+          // for (let group of groups) {
+          //   let labelColor = color();
+          //   group = group.map(d => imagesElem[d]);
+          //   for (let elem of group) {
+          //     elem.style.fillStyle = labelColor;
+          //     elem.style.opacity = 0.25;
+          //   }
+          //   // util.drawContour(forecanvas.node(), group);
+          // }
           util.drawImage(forecanvas.node(), imagesElem);
           let area = {
             x: parseInt(_xscale.range()[0]),

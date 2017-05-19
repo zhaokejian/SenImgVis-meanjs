@@ -1,6 +1,6 @@
 'use strict';
 
-const addon = require('../../../addon/build/Release/tsne.addon');
+const addon = require('../../addon/build/Release/tsne.addon');
 let _ = require('lodash');
 
 let return_v = false;

@@ -33,16 +33,16 @@
     $onInit() {
       let msg = {};
       console.log('success');
-      // this.$http.get('/api/project')
-      //   .then(response => {
-      //     msg = response.data;
-      //     console.log(msg);
-      //     if (msg.image && msg.word) {
-      //       this.event.emit(this.event.DATASETCHANGED, msg);
-      //       this.database.configure(msg);
-      //       this.msg = msg;
-      //     }
-      //   });
+      this.$http.get('/api/project/')
+        .then(response => {
+          msg = response.data;
+          console.log(msg);
+          if (msg.image && msg.word) {
+            this.event.emit(this.event.DATASETCHANGED, msg);
+            this.database.configure(msg);
+            this.msg = msg;
+          }
+        });
     }
 
     // expand() {
@@ -105,6 +105,6 @@
 
   angular
     .module(app.applicationModuleName)
-    .controller('AppController', ['$scope','$http', 'database', 'event', AppController]);
+    .controller('AppController', ['$scope','$http', 'event', 'database', AppController]);
 
 }(ApplicationConfiguration));
