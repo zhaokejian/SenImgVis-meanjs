@@ -33,8 +33,10 @@
     $onInit() {
       let msg = {};
       console.log('success');
+      console.time('http_get::/api/project/');
       this.$http.get('/api/project/')
         .then(response => {
+          console.timeEnd('http_get::/api/project/');
           msg = response.data;
           console.log(msg);
           if (msg.image && msg.word) {
@@ -44,63 +46,6 @@
           }
         });
     }
-
-    // expand() {
-    //   let self = this;
-    //   let pre = this.level;
-    //   self.level = Math.min(self.level + 1, 50);
-    //   if (pre === this.level) return;
-    //   self.$scope.$safeApply(function() {
-    //     self.scale = (self.level * 0.5) + 1;
-    //   });
-    //   console.log('expand');
-    // }
-    //
-    // contract() {
-    //   let self = this;
-    //   let pre = this.level;
-    //   self.level = Math.max(self.level - 1, 0);
-    //   if (pre === this.level) return;
-    //   self.$scope.$safeApply(function() {
-    //     self.scale = (self.level * 0.5) + 1;
-    //   });
-    //   console.log('contract');
-    // }
-    //
-    // move(dx, dy) {
-    //   let self = this;
-    //   self.$scope.$safeApply(function() {
-    //     self.offset = [
-    //       self.offset[0] + (dx / self.scale),
-    //       self.offset[1] + (dy / self.scale)
-    //     ]
-    //   });
-    //   // console.log('move', self.offset);
-    // }
-    //
-    // deleteQuery(index, type) {
-    //   let self = this;
-    //   if (type === 'word') {
-    //     self.query.keywords.splice(index, 1);
-    //   } else {
-    //     self.query.keyimages.splice(index, 1);
-    //   }
-    // }
-    //
-    // switchAction = function(index, type) {
-    //   let self = this;
-    //   let data = type === 'word' ? self.query.keywords[index] : self.query.keyimages[index];
-    //   if (data[1] === 'plus')
-    //     data[1] = 'minus';
-    //   else
-    //     data[1] = 'plus';
-    // }
-    //
-    // locateTo = function(word) {
-    //   this.locateText = word;
-    //   console.log('locate', this.locateText);
-    // }
-
   }
 
   angular

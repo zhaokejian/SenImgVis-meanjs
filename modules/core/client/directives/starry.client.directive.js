@@ -1,14 +1,6 @@
 (function(app) {
   'use strict';
 
-  // import angular from 'angular';
-  // import * as d3 from 'd3';
-
-
-  // import Starry from './starry.service';
-  // import listenerManager from '../../util/listener';
-  // import Interaction from './interaction.service';
-
   angular.module(app.applicationModuleName)
     .directive('starry', ['event', '$timeout', '$http', 'starryCtrl', 'listener', 'interaction',
       function(event, $timeout, $http, starry, listener, Interaction) {
@@ -222,10 +214,8 @@
               width: svg.node().clientWidth,
               height: svg.node().clientHeight
             });
-            // New data
+            // New data, $onInit
             event.on(scope, event.DATASETCHANGED, function(msg) {
-              starry.clear(forecanvas.node());
-              starry.clear(backcanvas.node());
               starry.configure({
                 data: msg,
                 width: forecanvas.node().clientWidth,

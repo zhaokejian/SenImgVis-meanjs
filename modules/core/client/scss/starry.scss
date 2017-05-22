@@ -96,7 +96,8 @@ starry {
 }
 
 .virtual {
-  visibility: hidden;
+  // visibility: hidden;
+  fill: rgb(255, 0, 0);
 }
 
 svg image {

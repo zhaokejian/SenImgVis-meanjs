@@ -2,17 +2,6 @@
 
   'use strict';
 
-  // import angular from 'angular';
-  // import * as d3 from 'd3';
-  // import Solar from './solar.service';
-  // import Interaction from './interaction.service';
-  // import mathFactory from '../../util/mathfactory';
-  // import textFactory from '../../util/textfactory';
-  // import VPTree from '../../util/vptree';
-
-  // import singular from '../resource/singular';
-  // import Transition from './transition.service';
-
   let ADDNEWWORD = function(selections, config) {
     selections.classed('keyword', true)
       .attr('dominant-baseline', 'middle')
@@ -223,7 +212,7 @@
           let dump = container.selectAll('text').filter(function() {
             return !d3.select(this).classed('keyword');
           });
-          console.log(dump.size());
+          console.log("dump keyword size: " + dump.size());
           dump.remove();
           let current = container.selectAll('.keyword')
             .data(nodes, d => d.text);
@@ -237,12 +226,14 @@
                   .transition().call(Transition.FadeIn);
                 config.renderCanvas();
               });
+            console.log("ADDNEWWORD when zoomByWheel");
           } else {
             current
               .attr('x', d => d.solution[0])
               .attr('y', d => d.solution[1]);
             enter.call(ADDNEWWORD, config)
               .transition().call(Transition.FadeIn);
+            console.log("ADDNEWWORD in nodes");
           }
           enter.call(onclick, config.util, svg);
           enter.call(onmouseover, config.util, svg, singular);

@@ -1,124 +1,97 @@
 (function(app) {
   'use strict';
 
-  // import angular from 'angular';
-  // import * as d3 from 'd3';
-  // import solar from './solar.service';
-  // import stopword from '../../resource/stopword';
-  // import textFactory from '../../util/textfactory';
-
-  // import scaleTransform from '../../util/scaletransform';
-  // import clustering from '../../util/clustering';
-  // import Singular from '../resource/singular';
-  // import VPTree from '../../util/vptree';
-  // import mathFactory from '../../util/mathfactory';
-  // import collision from '../../util/collision';
-  // import Draw from './draw.service';
-
-  // Return a function to search word vElement
-  let SearchWord = function(words) {
-    let word2id = {};
-    words.forEach((d, i) => {
-      word2id[d._data_.word] = i;
-    });
-    return function(word) {
-      if (!word2id.hasOwnProperty(word)) return;
-      return words[word2id[word]];
-    };
-  };
-
-  // Return a function to search image vElement
-  let SearchImage = function(images) {
-    let image2id = {};
-    images.forEach((d, i) => {
-      image2id[d._data_.id] = i;
-    });
-    return function(id) {
-      if (!image2id.hasOwnProperty(id)) return;
-      return images[image2id[id]];
-    };
-  };
-
-  // Return color generator
-  let ColorGenerator = function() {
-    let _count = 0;
-    var color = d3.scaleOrdinal(d3.schemeCategory10);
-    return function(counter) {
-      if (isNaN(counter))
-        _count = (_count + 1) % 10;
-      else
-        _count = counter;
-      return color(_count);
-    }
-  };
-
-  let TransformMatrix = function(arr) {
-    let matrix = {};
-    let attr = ['a', 'b', 'c', 'd', 'e', 'f'];
-    for (let i = 0; i < attr.length; i++)
-      matrix[attr[i]] = arr[i];
-    return matrix;
-  };
-
-  let ZoomManager = function(deepest = 3) {
-    let _levels = 0;
-    let timeouts = [];
-    let clean = function() {
-      for (let t of timeouts)
-        t.stop();
-      timeouts = [];
-    }
-    return {
-      current: () => {
-        return _levels;
-      },
-      zoomIn: () => {
-        if (_levels < deepest) {
-          _levels += 1;
-          return true;
-        }
-        return false;
-      },
-      zoomOut: () => {
-        if (_levels > 0) {
-          _levels -= 1;
-          return true;
-        }
-        return false;
-      },
-      set: (level) => {
-        _levels = level;
-      },
-      clean: clean,
-      execute: (cb) => {
-        clean();
-        let t = d3.timeout(function() {
-          if (cb) cb();
-        }, 0);
-        timeouts.push(t);
-      }
-    };
-  };
-
   angular
     .module(app.applicationModuleName)
     .factory('starryCtrl', [ 'scaleTransform', 'cluster', 'maths', 'collision', 'draw', 'singular',
     function(scaleTransform, cluster, maths, collision, Draw, Singular) {
-      let backcanvas, forecanvas, svg;
-      let _xdomain, _ydomain;
-      let _xscale, _yscale;
-      let _originScale;
-      let _data, _width, _height;
-      let _interfaces = {};
-      let _labels = {};
-      let _groups = {};
-      let _virtualElements = {};
-      let _vsvg = {};
-      let _heap = [];
-      let _keywords = [];
-      let _keywordProportion = [0.15, 0.15, 0.6, 1, 1];
-      let _zoomProportion = [1, 2, 4, 8, 16];
-      let _zoomManager = {};
+
+    //============================functions begin===============================
+      // Return a function to search word vElement
+      let SearchWord = function(words) {
+        let word2id = {};
+        words.forEach((d, i) => {
+          word2id[d._data_.word] = i;
+        });
+        return function(word) {
+          if (!word2id.hasOwnProperty(word)) return;
+          return words[word2id[word]];
+        };
+      };
+
+      // Return a function to search image vElement
+      let SearchImage = function(images) {
+        let image2id = {};
+        images.forEach((d, i) => {
+          image2id[d._data_.id] = i;
+        });
+        return function(id) {
+          if (!image2id.hasOwnProperty(id)) return;
+          return images[image2id[id]];
+        };
+      };
+
+      // Return color generator
+      let ColorGenerator = function() {
+        let _count = 0;
+        var color = d3.scaleOrdinal(d3.schemeCategory10);
+        return function(counter) {
+          if (isNaN(counter))
+            _count = (_count + 1) % 10;
+          else
+            _count = counter;
+          return color(_count);
+        }
+      };
+
+      let TransformMatrix = function(arr) {
+        let matrix = {};
+        let attr = ['a', 'b', 'c', 'd', 'e', 'f'];
+        for (let i = 0; i < attr.length; i++)
+          matrix[attr[i]] = arr[i];
+        return matrix;
+      };
+
+      //manager the zoom levels (4 in total)
+      let ZoomManager = function(deepest = 3) {
+        let _levels = 0;
+        let timeouts = [];
+        let clean = function() {
+          for (let t of timeouts)
+            t.stop();
+          timeouts = [];
+        }
+        return {
+          current: () => {
+            return _levels;
+          },
+          zoomIn: () => {
+            if (_levels < deepest) {
+              _levels += 1;
+              return true;
+            }
+            return false;
+          },
+          zoomOut: () => {
+            if (_levels > 0) {
+              _levels -= 1;
+              return true;
+            }
+            return false;
+          },
+          set: (level) => {
+            _levels = level;
+          },
+          clean: clean,
+          execute: (cb) => {
+            clean();
+            let t = d3.timeout(function() {
+              if (cb) cb();
+            }, 0);
+            timeouts.push(t);
+          }
+        };
+      };
 
       // Return a function to brush neighboors of a point
       let Brush = function(node) {
@@ -140,6 +113,24 @@
           return result;
         };
       };
+    //============================functions end=================================
+
+    //============================main begin====================================
+      let backcanvas, forecanvas, svg;
+      let _xdomain, _ydomain;
+      let _xscale, _yscale;
+      let _originScale;
+      let _data, _width, _height;
+      let _interfaces = {};
+      let _labels = {};
+      let _groups = {};
+      let _virtualElements = {};
+      let _vsvg = {};
+      let _heap = [];
+      let _keywords = [];
+      let _keywordProportion = [0.15, 0.15, 0.6, 1, 1];
+      let _zoomProportion = [1, 2, 4, 8, 16];
+      let _zoomManager = {};
 
       let starry = {
         // Configure data
@@ -180,10 +171,10 @@
         init: function() {
           starry.scaleData();
           _originScale = [_xscale.copy(), _yscale.copy()];
+          console.log("clear forecanvas & backcanvas when init");
           starry.clear(forecanvas.node());
           starry.clear(backcanvas.node());
           svg.select('.all-container').selectAll('*').remove();
-          console.log(svg.selectAll('*').size())
         },
         // Return data
         data: function() {
@@ -214,7 +205,6 @@
         // Scale the data
         scaleData: function() {
           let data = starry.heap();
-          console.log(data.image.filter(d => d.solution === undefined || d.solution[0] === undefined));
           let xset = data.word.map(d => d.solution[0]);
           let yset = data.word.map(d => d.solution[1]);
           xset = xset.concat(data.image.map(d => d.solution[0]));
@@ -244,44 +234,13 @@
           }
           return scale;
         },
-        groups: function() {
-          return _groups;
-        },
-        computeGroups: function() {
-          let data = starry.data();
-          let nodes = data.image;
-          nodes = nodes.concat(data.word);
-          let result = cluster(nodes.map(d => d.solution));
-          let groups = result.groups;
-          let noise = result.noise;
-          if (!noise) noise = [];
-          console.log(groups);
-          let labels = nodes.map(d => -1);
-          for (let i = 0; i < groups.length; i++) {
-            for (let index of groups[i]) {
-              labels[index] = i;
-            }
-          }
-          _labels.image = labels.slice(0, data.image.length);
-          _labels.word = labels.slice(data.image.length, nodes.length);
-          _groups = {
-            image: [],
-            word: []
-          };
-          for (let i = 0; i <= d3.max(labels); i++) {
-            _groups.image.push([]);
-            _groups.word.push([]);
-          }
-          for (let i = 0; i < _labels.image.length; i++) {
-            let label = _labels.image[i];
-            if (label > -1)
-              _groups.image[label].push(i);
-          }
-          for (let i = 0; i < _labels.word.length; i++) {
-            let label = _labels.word[i];
-            if (label > -1)
-              _groups.word[label].push(i);
-          }
+        // Return keywords accordinig to zoom level
+        keywords: function() {
+          let current = _zoomManager.current();
+          if (_keywords[current]) return _keywords[current];
+          let keywords = starry.extractKeywords(_keywordProportion[current]);
+          _keywords[current] = keywords;
+          return keywords;
         },
         // extract keywords
         extractKeywords: function(proportion) {
@@ -316,14 +275,7 @@
           let result = root.slice(0, num).map(d => d.word);
           return result;
         },
-        // Return keywords accordinig to zoom level
-        keywords: function() {
-          let current = _zoomManager.current();
-          if (_keywords[current]) return _keywords[current];
-          let keywords = starry.extractKeywords(_keywordProportion[current]);
-          _keywords[current] = keywords;
-          return keywords;
-        },
+        //return virtualElements
         virtualElements: function() {
           return _virtualElements;
         },
@@ -411,8 +363,22 @@
         genInterfaces: function(exportCallback) {
           let vElements = starry.virtualElements();
           // Brush interface
-          let brushImage = Brush(vElements.image);
-          let brushWord = Brush(vElements.word);
+          let _brushWord = Brush(vElements.word);
+          let _brushImage = Brush(vElements.image);
+          let brushWord = function(p, radius) {
+            let scale = starry.scale();
+            p = p.map((d, i) => scale[i].invert(d));
+            let factor = Math.abs(scale[0].domain()[0] - scale[0].domain()[1]) / Math.abs(scale[0].range()[1] - scale[0].range()[0]);
+            radius *= factor;
+            return _brushImage(p, radius);
+          };
+          let brushImage = function(p, radius) {
+            let scale = starry.scale();
+            p = p.map((d, i) => scale[i].invert(d));
+            let factor = Math.abs(scale[0].domain()[0] - scale[0].domain()[1]) / Math.abs(scale[0].range()[1] - scale[0].range()[0]);
+            radius *= factor;
+            return _brushImage(p, radius);
+          };
           // Search interface
           let searchWord = SearchWord(vElements.word);
           let searchImage = SearchImage(vElements.image);
@@ -424,38 +390,26 @@
           // let drawSolar = Draw.DrawSolar();
           // let fixSolar = Draw.FixSolar();
           let deleteSolar = Draw.DeleteSolar();
-          // let drawTree = Draw.DrawTree();
           let animateCanvas = Draw.AnimateCanvas();
-          // Update interfaces
-          // _interfaces = { drawWord, drawImage, drawContour, drawDensity, drawTree, drawSolar, fixSolar, deleteSolar, animateCanvas, searchWord, searchImage };
+
+          //Get interface
+          let getWordByIndex = function(index) {
+            return _data.word[index];
+          }
+          let getImageByIndex = function(index) {
+            return _data.image[index];
+          }
+          // _interfaces.exportCallback = exportCallback;
           _interfaces = {
             drawWord,
             drawImage,
+            searchWord,
+            searchImage,
             deleteSolar,
             animateCanvas,
-            searchWord,
-            searchImage
-          };
-          _interfaces.brushImage = function(p, radius) {
-            let scale = starry.scale();
-            p = p.map((d, i) => scale[i].invert(d));
-            let factor = Math.abs(scale[0].domain()[0] - scale[0].domain()[1]) / Math.abs(scale[0].range()[1] - scale[0].range()[0]);
-            radius *= factor;
-            return brushImage(p, radius);
-          };
-          _interfaces.brushWord = function(p, radius) {
-            let scale = starry.scale();
-            p = p.map((d, i) => scale[i].invert(d));
-            let factor = Math.abs(scale[0].domain()[0] - scale[0].domain()[1]) / Math.abs(scale[0].range()[1] - scale[0].range()[0]);
-            radius *= factor;
-            return brushWord(p, radius);
-          };
-          _interfaces.exportCallback = exportCallback;
-          _interfaces.getWordByIndex = function(index) {
-            return _data.word[index];
-          };
-          _interfaces.getImageByIndex = function(index) {
-            return _data.image[index];
+            getWordByIndex,
+            getImageByIndex,
+            exportCallback
           };
           // Save
           starry.heap().brushImage = _interfaces.brushImage;
@@ -476,7 +430,7 @@
           }
           let keywords = starry.keywords();
           let keywordsElem = keywords.map(d => util.searchWord(d));
-          collision.FixConflict(keywordsElem);
+          collision.FixConflict(keywordsElem);//
           util.drawWord(svg, keywordsElem, {
             util
           });
@@ -563,7 +517,7 @@
         },
         // Clean the canvas
         clear: function(canvas) {
-          console.log('clear');
+          console.log("clear");
           let ctx = canvas.getContext("2d");
           let canvasWidth = canvas.clientWidth;
           let canvasHeight = canvas.clientHeight;

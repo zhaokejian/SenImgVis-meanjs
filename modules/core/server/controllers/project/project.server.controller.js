@@ -76,20 +76,26 @@ exports.DefaultProjection = function(req, res) {
   let image_projection = { 'id': 1, 'origin_constructors': 1, 'caption': 1, 'index': 1, 'solution': 1 };
   let word_projection = { 'word': 1, 'origin_constructors': 1, 'index': 1, 'solution': 1 };
   let data = {};
+  console.time('find Image in DefaultProjection');
   return Image.find(null, image_projection).exec()
     .then((image) => {
+      console.timeEnd('find Image in DefaultProjection');
       data.image = image;
+      console.time('find Word in DefaultProjection');
       return Word.find(null, word_projection).exec();
     })
     .then((word) => {
+      console.timeEnd('find Word in DefaultProjection');
       data.word = word;
       return data;
     })
     .then((data) => {
+      console.time('sort & map in DefaultProjection');
       data.image.sort((a, b) => a.index - b.index);
       data.word.sort((a, b) => a.index - b.index);
       let imageConstructors = data.image.map(d => d.origin_constructors);
       let wordConstructors = data.word.map(d => d.origin_constructors);
+      console.timeEnd('sort & map in DefaultProjection');
       let result = {};
       result.image = data.image.map((d, i) => {
         return { _id: d._id, id: d.id, caption: d.caption, constructors: imageConstructors[i], solution: d.solution };
