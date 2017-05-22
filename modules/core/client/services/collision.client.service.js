@@ -33,6 +33,8 @@
         while (max_iter--) {
           let ilist = d3.range(elem.length),
             jlist = d3.range(elem.length);
+          console.log("ilist:" + ilist);
+          console.log("jlist:" + jlist);
           // ilist = d3.shuffle(ilist);
           // jlist = d3.shuffle(jlist);
           for (let i of ilist) {
@@ -40,6 +42,8 @@
               if (i === j) continue;
               let a = elem[i].dom.getBoundingClientRect();
               let b = elem[j].dom.getBoundingClientRect();
+              console.log(a);
+              console.log(b);
               // console.log(a, b);
               if (Overlap(BBox(a), BBox(b))) {
                 confict = true;

@@ -298,7 +298,8 @@
               id: _virtualElements.image.length,
               solution: node.solution.map((d, i) => scale[i](d)),
               style: {
-                fillStyle: 'rgb(255, 255, 255)',
+                r: 3,
+                fillStyle: '#109ff0',
                 opacity: 0.25
               }
             });
@@ -385,10 +386,8 @@
           // Render interface
           let drawWord = Draw.DrawWord();
           let drawImage = Draw.DrawImage();
-          // let drawDensity = Draw.DrawDensity();
-          // let drawContour = Draw.DrawContour();
-          // let drawSolar = Draw.DrawSolar();
-          // let fixSolar = Draw.FixSolar();
+          let drawSolar = Draw.DrawSolar();
+          let fixSolar = Draw.FixSolar();
           let deleteSolar = Draw.DeleteSolar();
           let animateCanvas = Draw.AnimateCanvas();
 
@@ -401,10 +400,14 @@
           }
           // _interfaces.exportCallback = exportCallback;
           _interfaces = {
-            drawWord,
-            drawImage,
+            brushWord,
+            brushImage,
             searchWord,
             searchImage,
+            drawWord,
+            drawImage,
+            drawSolar,
+            fixSolar,
             deleteSolar,
             animateCanvas,
             getWordByIndex,
@@ -429,32 +432,16 @@
             _keywords[i] = starry.extractKeywords(_keywordProportion[i]);
           }
           let keywords = starry.keywords();
+          // Draw words
           let keywordsElem = keywords.map(d => util.searchWord(d));
-          collision.FixConflict(keywordsElem);//
+          collision.FixConflict(keywordsElem);//object.getBoundingClientRect()
           util.drawWord(svg, keywordsElem, {
             util
           });
 
-          let color = ColorGenerator();
-          // let groups = starry.groups().image;
+          // Draw image
           let imagesElem = starry.virtualElements().image;
-          // for (let group of groups) {
-          //   let labelColor = color();
-          //   group = group.map(d => imagesElem[d]);
-          //   for (let elem of group) {
-          //     elem.style.fillStyle = labelColor;
-          //     elem.style.opacity = 0.25;
-          //   }
-          //   // util.drawContour(forecanvas.node(), group);
-          // }
           util.drawImage(forecanvas.node(), imagesElem);
-          let area = {
-            x: parseInt(_xscale.range()[0]),
-            y: parseInt(_yscale.range()[1]),
-            width: parseInt(_xscale.range()[1] - _xscale.range()[0]),
-            height: parseInt(_yscale.range()[0] - _yscale.range()[1])
-          };
-          // util.drawDensity(backcanvas.node(), area, util.brushImage);
         },
         renderImage: function(canvas) {
           let util = starry.interfaces();
