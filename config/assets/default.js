@@ -9,7 +9,8 @@ module.exports = {
         // bower:css
         'public/lib/bootstrap/dist/css/bootstrap.css',
         'public/lib/bootstrap/dist/css/bootstrap-theme.css',
-        'public/lib/angular-ui-notification/dist/angular-ui-notification.css'
+        'public/lib/angular-ui-notification/dist/angular-ui-notification.css',
+        'public/lib/flat-ui/dist/css/flat-ui.css'
         // endbower
       ],
       js: [
@@ -27,6 +28,8 @@ module.exports = {
         'public/lib/d3/d3.min.js',
         'public/lib/density-clustering/clustering.min.js',
         'public/lib/vptree/vptree.min.js',
+        'public/lib/jquery/dist/jquery.min.js',
+        'public/lib/flat-ui/dist/js/flat-ui.js'
         // endbower
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']

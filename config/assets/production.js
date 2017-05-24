@@ -10,6 +10,7 @@ module.exports = {
         'public/lib/angular-ui-notification/dist/angular-ui-notification.min.css',
         'public/lib/bootstrap/dist/css/bootstrap.min.css',
         'public/lib/bootstrap/dist/css/bootstrap-theme.min.css',
+        'public/lib/flat-ui/dist/css/flat-ui.min.css'
         // endbower
       ],
       js: [
@@ -27,6 +28,8 @@ module.exports = {
         'public/lib/d3/d3.min.js',
         'public/lib/density-clustering/clustering.min.js',
         'public/lib/vptree/vptree.min.js',
+        'public/lib/flat-ui/dist/js/flat-ui.min.js',
+        'public/lib/jquery/dist/jquery.min.js'
         // endbower
       ]
     },
