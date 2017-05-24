@@ -3,8 +3,8 @@
 
   angular
     .module(app.applicationModuleName)
-    .factory('starryCtrl', [ 'scaleTransform', 'cluster', 'maths', 'collision', 'draw', 'singular',
-    function(scaleTransform, cluster, maths, collision, Draw, Singular) {
+    .factory('starryCtrl', [ 'scaleTransform', 'maths', 'collision', 'draw', 'singular',
+    function(scaleTransform, maths, collision, Draw, Singular) {
 
     //============================functions begin===============================
       // Return a function to search word vElement
