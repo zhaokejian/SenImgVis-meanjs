@@ -41,7 +41,9 @@ angular
 
     interaction.svg.onmousewheel = function(selection, starry) {
     	selection.on('wheel', function() {
+        console.log('wheel');
     		let wheelDelta = 0, e = d3.event;
+        console.log(e);
     		let config = {};
     		let name = 'zoomByWheel';
     		if(e.wheelDelta){//IE/Opera/Chrome
@@ -67,7 +69,7 @@ angular
       let start;
       let move = false;
       drag.on('start', function() {
-    		console.log('dragstart');
+    		// console.log('dragstart');
         let p = [d3.event.x, d3.event.y];
         start = p;
         move = false;
@@ -82,7 +84,7 @@ angular
         starry.shift(config);
       });
       drag.on('end', function() {
-    		console.log('dragend');
+    		// console.log('dragend');
         let p = [d3.event.x, d3.event.y];
     		let offset = [p[0] - start[0], p[1] - start[1]];
         let config = {};
@@ -93,45 +95,6 @@ angular
     		}
       });
       selection.call(drag);
-    };
-
-    interaction.solarImage.onmouseover = function(selections, container, solar, data, util, config) {
-    	selections.on('mouseover', function(d) {
-    		d3.event.stopPropagation();
-    		let newdata = solar.focus(data, data[d.index]);
-    		newdata = solar.layoutGlyph(newdata);
-    		// add clip path
-    		util.AddClipPath(container, newdata, config);
-    		// add image
-    		util.AddImage(container.select('.solar-fix-'+config.text), newdata, config);
-    		// add caption
-    		util.AddCaption(container.select('.solar-fix-' + config.text), newdata[d.index]);
-    	});
-    };
-
-    interaction.solarImage.onmouseleave = function(selections, container, solar, data, util, config) {
-    	selections.on('mouseleave', function(d) {
-    		d3.event.stopPropagation();
-    		let newdata = data;
-    		// add clip path
-    		util.AddClipPath(container, newdata, config);
-    		// add image
-    		util.AddImage(container.select('.solar-fix-'+config.text), newdata, config);
-    		// clear caption
-    		container.selectAll('.caption-g').remove();
-    	});
-    };
-
-    interaction.solarImage.onclick = function (selections, container, solar, data, util, config) {
-    	selections.on('click', function (d) {
-    		d3.event.stopPropagation();
-    		let image = d.collage.data;
-    		let msg = {}
-    		msg.clickimage = true;
-    		msg.image = image;
-    		console.log(image.caption);
-    		config.exportCallback(msg);
-    	});
     };
 
     return interaction;

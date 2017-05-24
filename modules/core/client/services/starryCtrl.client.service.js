@@ -31,28 +31,7 @@
         };
       };
 
-      // Return color generator
-      let ColorGenerator = function() {
-        let _count = 0;
-        var color = d3.scaleOrdinal(d3.schemeCategory10);
-        return function(counter) {
-          if (isNaN(counter))
-            _count = (_count + 1) % 10;
-          else
-            _count = counter;
-          return color(_count);
-        }
-      };
-
-      let TransformMatrix = function(arr) {
-        let matrix = {};
-        let attr = ['a', 'b', 'c', 'd', 'e', 'f'];
-        for (let i = 0; i < attr.length; i++)
-          matrix[attr[i]] = arr[i];
-        return matrix;
-      };
-
-      //manager the zoom levels (4 in total)
+      //manager the zoom levels (default deepest = 3)
       let ZoomManager = function(deepest = 3) {
         let _levels = 0;
         let timeouts = [];
@@ -152,7 +131,7 @@
           _keywords = [];
           _heap = [];
           _heap.push(starry.data());
-          _zoomManager = ZoomManager(_zoomProportion.length - 1);
+          _zoomManager = ZoomManager(_zoomProportion.length - 1);//0, 1, 2, 3, 4
         },
         resetSolution: function(data) {
           for (let i = 0; i < data.word.length; i++) {
@@ -332,7 +311,7 @@
           let data = starry.heap();
           let util = starry.interfaces();
           d3.select(_vsvg).selectAll('*').remove();
-          console.time('update words');
+          // console.time('update words');
           for (let node of data.word) {
             let vElem = util.searchWord(node.word);
             vElem.solution = vElem._data_.solution.map((d, i) => scale[i](d));
@@ -342,19 +321,19 @@
               .attr('y', vElem.solution[1]);
             _vsvg.appendChild(vElem.dom);
           }
-          console.timeEnd('update words');
+          // console.timeEnd('update words');
         },
         // update vElements of images
         updateImageElements: function(scale) {
           scale = scale || starry.scale();
           let data = starry.heap();
           let util = starry.interfaces();
-          console.time('update images');
+          // console.time('update images');
           for (let node of data.image) {
             let vElem = util.searchImage(node.id);
             vElem.solution = vElem._data_.solution.map((d, i) => scale[i](d));
           }
-          console.timeEnd('update images');
+          // console.timeEnd('update images');
         },
         // Return interactive interfaces
         interfaces: function() {
@@ -447,17 +426,11 @@
           let util = starry.interfaces();
           let data = starry.heap();
           let imagesElem = data.image.map(d => util.searchImage(d.id));
-          if (starry.layer() === 1) {
-            let groups = starry.groups().image;
-            for (let group of groups) {
-              group = group.map(d => imagesElem[d]);
-              util.drawContour(canvas.node(), group);
-            }
-          }
-          console.time('draw image');
+          // console.time('draw image');
           util.drawImage(canvas.node(), imagesElem);
-          console.timeEnd('draw image');
+          // console.timeEnd('draw image');
         },
+        //get keywords, FixConflict, and drawWord
         renderWord: function(svg, config) {
           config = config || {};
           let util = starry.interfaces();
@@ -511,7 +484,7 @@
           ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         },
         zoomByWheel: function(config) {
-          _zoomManager.clean();
+          // _zoomManager.clean();
           let currentScale = starry.scale();
           let targetScale;
           let util = starry.interfaces();
@@ -520,7 +493,7 @@
             let current = _zoomManager.current();
             config.factor = _zoomProportion[current] / _zoomProportion[current - 1];
           }
-          if (config.zoomOut === true && _zoomManager.zoomOut()) {
+          else if (config.zoomOut === true && _zoomManager.zoomOut()) {
             config.scale = true;
             let current = _zoomManager.current();
             config.factor = _zoomProportion[current] / _zoomProportion[current + 1];
@@ -540,7 +513,6 @@
               }
             });
             util.animateCanvas(backcanvas.node(), config.factor, function() {
-              starry.clear(forecanvas.node());
               starry.updateImageElements();
               starry.renderImage(forecanvas);
             });

@@ -83,7 +83,6 @@
     	solar.clipPath = function(selection) {
     		selection
     			.attr('cx', d => {
-            console.log(d.image.r);
     				let aspect = d.image.width / d.image.height;
     				return aspect > 1 ? (d.image.r * aspect) : d.image.r;
     			})

@@ -4,7 +4,7 @@
 
   angular
     .module(app.applicationModuleName)
-    .factory('draw', ['transition', 'singular', function(Transition, singular) {
+    .factory('draw', ['solar', 'transition', 'singular', function(solarchart, Transition, singular) {
       let draw = {};
 
       // Return a function to draw a word
@@ -39,7 +39,7 @@
                 .filter((d) => d.text === config.text);
               word.classed('focus-keyword', true);
             } else {
-              // svg.selectAll('.focus-keyword').classed('focus-keyword', false);
+              svg.selectAll('.focus-keyword').classed('focus-keyword', false);
               util.deleteSolar(svg, config);
             }
             svg.selectAll('.children').classed('children', false);
@@ -114,11 +114,14 @@
         };
         let onmouseover = function(selections, util, svg) {
           selections.on('mouseover', function(d, i) {
+            console.log('mouseover keyword');
+            console.log(d);
             let config = {},
               radius = 500;
             config.center = d.solution;
             config.text = d.text;
             config.exportCallback = util.exportCallback;
+            // return adjacent images
             let images = util.brushImage(d._solution_, radius).map(d => d.data._data_);
             images = images.filter((d) => {
               let caption = d.caption[0].split(' ');
@@ -127,6 +130,8 @@
               }
               return false;
             });
+            // console.log("brushImage:");
+            // console.log(images);
             util.drawSolar(svg, images, config);
             let X = images.map(d => d.caption[0]);
             // console.log(textFactory.Frequent(X, config.text));
@@ -146,7 +151,6 @@
           let dump = container.selectAll('text').filter(function() {
             return !d3.select(this).classed('keyword');
           });
-          console.log("dump keyword size: " + dump.size());
           dump.remove();
           let current = container.selectAll('.keyword')
             .data(nodes, d => d.text);
@@ -221,7 +225,6 @@
                 currentscale = 1;
                 targetscale = 1;
                 cb();
-                console.log('end animation');
               };
             }, i * (duration / times));
             timeouts.push(t);
@@ -307,7 +310,6 @@
             .sort();
         };
         return function(svg, nodes, config) {
-          let solarchart = Solar();
           config = config || {};
           config.center = config.center || [0, 0];
           config.data = nodes;
@@ -351,15 +353,15 @@
                   solarchart.relayout();
                   update();
                   g.selectAll('.caption-g').remove();
-                })
-                .on('click', function(d) {
-                  d3.event.stopPropagation();
-                  let image = d.image.d;
-                  let msg = {}
-                  msg.clickimage = true;
-                  msg.image = image;
-                  config.exportCallback(msg);
                 });
+                // .on('click', function(d) {
+                //   d3.event.stopPropagation();
+                //   let image = d.image.d;
+                //   let msg = {}
+                //   msg.clickimage = true;
+                //   msg.image = image;
+                //   config.exportCallback(msg);
+                // });
             }
           }
 

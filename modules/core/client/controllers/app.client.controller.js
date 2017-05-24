@@ -40,7 +40,7 @@
           msg = response.data;
           console.log(msg);
           if (msg.image && msg.word) {
-            this.event.emit(this.event.DATASETCHANGED, msg);
+            this.event.emit(this.event.DATASETCHANGED, msg);//trigger dataSetChange
             this.database.configure(msg);
             this.msg = msg;
           }

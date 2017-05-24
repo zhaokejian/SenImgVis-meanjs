@@ -75,12 +75,12 @@ starry {
 }
 
 #starry-svg .keyword.children {
-  fill: #FFB732;
+  fill: #088DA5;
   font-size: 20px;
 }
 
 #starry-svg .keyword.parent {
-  fill: #088DA5;
+  fill: #ff6332;
   font-size: 30px;
 }
 
@@ -96,7 +96,7 @@ starry {
 }
 
 .virtual {
-  // visibility: hidden;
+  visibility: hidden;
   fill: rgb(255, 0, 0);
 }
 
