@@ -2,8 +2,8 @@
   'use strict';
 
   angular.module(app.applicationModuleName)
-    .directive('starry', ['event', '$timeout', '$http', 'starryCtrl', 'listener', 'interaction',
-      function(event, $timeout, $http, starry, listener, Interaction) {
+    .directive('starry', ['event', '$timeout', '$http', 'starryCtrl', 'interaction',
+      function(event, $timeout, $http, starry, Interaction) {
         let assignStyle = function(dom, style) {
           let keys = Object.keys(style);
           for (let n of keys) {
