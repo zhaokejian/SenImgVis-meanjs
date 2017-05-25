@@ -28,37 +28,37 @@
             let forecanvas = d3.select(element[0]).select('#starry-canvas');
             let svg = d3.select(element[0]).select('#starry-svg');
             let exportCallback = function(msg) {
-              if (msg.clickimage) {
-                event.emit(event.SHOWIMAGECHANGED, [msg.image]);
+              if (msg.clickimage) {//click image in solar
+                event.emit(event.SHOWIMAGECHANGED, [msg.image]);//show image in browser
                 event.emit(event.SPECIFYKEYIMAGE, msg);
               }
-              if (msg.dblclickword) {
-                return $http({
-                  url: '/api/word/' + msg.word,
-                  method: "GET"
-                }).then(response => {
-                  let data = response.data[0];
-                  let word = msg.word;
-                  let children = data.children;
-                  let constructors = data.constructors;
-                  let util = starry.interfaces();
-                  children = children.map(util.getWordByIndex);
-                  constructors = constructors.map(d => {
-                    let word = util.getWordByIndex(d.index);
-                    d.word = word.word;
-                    return d;
-                  });
-                  event.emit(event.SHOWRECONSTRUCT, {
-                    children,
-                    constructors,
-                    word
-                  });
-                  return data;
-                });
-              }
-              if (msg.reconstructword) {
-                console.log(msg.reconstructword);
-              }
+              // if (msg.dblclickword) {
+              //   return $http({
+              //     url: '/api/word/' + msg.word,
+              //     method: "GET"
+              //   }).then(response => {
+              //     let data = response.data[0];
+              //     let word = msg.word;
+              //     let children = data.children;
+              //     let constructors = data.constructors;
+              //     let util = starry.interfaces();
+              //     children = children.map(util.getWordByIndex);
+              //     constructors = constructors.map(d => {
+              //       let word = util.getWordByIndex(d.index);
+              //       d.word = word.word;
+              //       return d;
+              //     });
+              //     event.emit(event.SHOWRECONSTRUCT, {
+              //       children,
+              //       constructors,
+              //       word
+              //     });
+              //     return data;
+              //   });
+              // }
+              // if (msg.reconstructword) {
+              //   console.log(msg.reconstructword);
+              // }
             };
             assignStyle(backcanvas.node(), {
               backgroundColor: '#000'
@@ -109,11 +109,12 @@
               console.log(msg);
               starry.jumpToImage(msg, svg);
             });
+            //click svg emitter (choose image point)
             let emitter = (d) => {
               event.emit(event.SHOWIMAGECHANGED, d);
               if (!d[0]) return;
               $http({
-                url: '/api/image/' + d[0].id,
+                url: '/api/image/' + d[0].id,//get one image
                 method: "GET"
               }).then(response => {
                 let msg = response.data;
@@ -125,7 +126,7 @@
                   return d;
                 });
                 let id = data.id;
-                event.emit(event.SHOWIMAGECONSTRUCTOR, {
+                event.emit(event.SHOWIMAGECONSTRUCTOR, {//show image constructor in searchinterface
                   constructors,
                   id
                 });

@@ -353,15 +353,15 @@
                   solarchart.relayout();
                   update();
                   g.selectAll('.caption-g').remove();
+                })
+                .on('click', function(d) {
+                  d3.event.stopPropagation();
+                  let image = d.image.d;
+                  let msg = {}
+                  msg.clickimage = true;
+                  msg.image = image;
+                  config.exportCallback(msg);
                 });
-                // .on('click', function(d) {
-                //   d3.event.stopPropagation();
-                //   let image = d.image.d;
-                //   let msg = {}
-                //   msg.clickimage = true;
-                //   msg.image = image;
-                //   config.exportCallback(msg);
-                // });
             }
           }
 

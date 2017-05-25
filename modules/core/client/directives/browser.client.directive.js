@@ -27,6 +27,7 @@ angular
         scope.imagesrc = '';
         scope.caption = '';
         scope.closing = 1;
+        scope.closeArrow = 1;
         scope.arrowStyle = {};
         scope.safeApply = function (fn) {
           var phase = this.$root.$$phase;
@@ -47,6 +48,7 @@ angular
               scope.imagesrc = base + data.id;
               scope.caption = data.caption[0];
               scope.closing = 0;
+              scope.closeArrow = 0;
               scope.arrowStyle = { 'top': (image.height / 2) + 'px' };
             });
             expandBrowser(container);
@@ -64,6 +66,7 @@ angular
               scope.imagesrc = base + data.id;
               scope.caption = data.caption[0];
               scope.closing = 0;
+              scope.closeArrow = 0;
               scope.arrowStyle = { 'top': (image.height / 2) + 'px' };
             });
             expandBrowser(container);
@@ -78,18 +81,22 @@ angular
         let expand = container.select('.expand');
         let close = container.select('.close');
         expand.on('click', function() {
+          if(!scope.imageBuckets.length) return;
           expandBrowser(container);
           scope.safeApply(function() {
             scope.closing = 0;
+            scope.closeArrow = (scope.imageBuckets.length == 1);
           });
         });
         close.on('click', function() {
           closeBrowser(container);
+          // scope.imageBuckets = [];//clear buckets
           scope.safeApply(function () {
             scope.closing = 1;
+            scope.closeArrow = 1;
           });
         });
-        // New data
+        // New data, show one image
         event.on(scope, event.SHOWIMAGECHANGED, function(msg) {
           // console.log(msg);
           if(!msg || !msg[0]) return;
@@ -103,6 +110,7 @@ angular
               scope.imagesrc = base + data.id;
               scope.caption = data.caption[0];
               scope.closing = 0;
+              scope.closeArrow = 1;
               scope.arrowStyle = { 'top': (image.height / 2) + 'px' };
             });
             expandBrowser(container);
@@ -120,6 +128,7 @@ angular
               scope.imagesrc = base + data.id;
               scope.caption = data.caption[0];
               scope.closing = 0;
+              scope.closeArrow = 1;
               scope.arrowStyle = { 'top': (image.height / 2) + 'px' };
             });
             expandBrowser(container);
