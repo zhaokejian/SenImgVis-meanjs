@@ -5,7 +5,8 @@ module.exports = function(app) {
   var core = require('../controllers/core.server.controller'),
       project = require('../controllers/project/project.server.controller'),
       image = require('../controllers/image.server.controller'),
-      word = require('../controllers/word.server.controller');
+      word = require('../controllers/word.server.controller'),
+      search = require('../controllers/search.server.controller');
 
   // project api
   app.route('/api/project/').get(project.DefaultProjection);
@@ -22,6 +23,9 @@ module.exports = function(app) {
   app.route('/api/word/').get(word.index);
   app.route('/api/word/:id').get(word.show);
   app.route('/api/word/children/construct').get(word.getChildren);
+
+  //search api
+  app.route('/api/search/').get(search.index);
 
   // Define error pages
   app.route('/server-error').get(core.renderServerError);
