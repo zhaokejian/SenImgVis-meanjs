@@ -32,33 +32,33 @@
                 event.emit(event.SHOWIMAGECHANGED, [msg.image]);//show image in browser
                 event.emit(event.SPECIFYKEYIMAGE, msg);
               }
-              // if (msg.dblclickword) {
-              //   return $http({
-              //     url: '/api/word/' + msg.word,
-              //     method: "GET"
-              //   }).then(response => {
-              //     let data = response.data[0];
-              //     let word = msg.word;
-              //     let children = data.children;
-              //     let constructors = data.constructors;
-              //     let util = starry.interfaces();
-              //     children = children.map(util.getWordByIndex);
-              //     constructors = constructors.map(d => {
-              //       let word = util.getWordByIndex(d.index);
-              //       d.word = word.word;
-              //       return d;
-              //     });
-              //     event.emit(event.SHOWRECONSTRUCT, {
-              //       children,
-              //       constructors,
-              //       word
-              //     });
-              //     return data;
-              //   });
-              // }
-              // if (msg.reconstructword) {
-              //   console.log(msg.reconstructword);
-              // }
+              if (msg.showReconstruct) {
+                return $http({
+                  url: '/api/word/' + msg.word,
+                  method: "GET"
+                }).then(response => {
+                  let data = response.data[0];
+                  let word = msg.word;
+                  let children = data.children;
+                  let constructors = data.constructors;
+                  let util = starry.interfaces();
+                  children = children.map(util.getWordByIndex);
+                  constructors = constructors.map(d => {
+                    let word = util.getWordByIndex(d.index);
+                    d.word = word.word;
+                    return d;
+                  });
+                  event.emit(event.SHOWRECONSTRUCT, {
+                    children,
+                    constructors,
+                    word
+                  });
+                  return data;
+                });
+              }
+              if (msg.reconstructword) {
+                console.log(msg.reconstructword);
+              }
             };
             assignStyle(backcanvas.node(), {
               backgroundColor: '#000'
@@ -100,15 +100,16 @@
             // New search keyword
             event.on(scope, event.SEARCHKEYWORD, function(msg) {
               let util = starry.interfaces();
-              console.log(msg);
+              // console.log(msg);
               starry.jumpToWord(msg, svg);
             });
             // New search image
             event.on(scope, event.SEARCHIMAGE, function(msg) {
               let util = starry.interfaces();
-              console.log(msg);
+              // console.log(msg);
               starry.jumpToImage(msg, svg);
             });
+
             //click svg emitter (choose image point)
             let emitter = (d) => {
               event.emit(event.SHOWIMAGECHANGED, d);

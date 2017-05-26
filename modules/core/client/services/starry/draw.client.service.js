@@ -38,78 +38,43 @@
               let word = svg.selectAll('.keyword')
                 .filter((d) => d.text === config.text);
               word.classed('focus-keyword', true);
+              //show children and parent
+              svg.selectAll('.children').classed('children', false);
+              svg.selectAll('.parent').classed('parent', false);
+              util.exportCallback({//emit showReconstruct
+                  'showReconstruct': true,
+                  'word': d.text
+                })
+                .then(function(data) {
+                  let children = data.children;
+                  let constructors = data.constructors;
+                  children = children.map(util.getWordByIndex);
+                  constructors = constructors.map(d => util.getWordByIndex(d.index));
+                  children = svg.selectAll('.keyword')
+                    .filter(d => {
+                      for (let i of children) {
+                        if (i.word === d.text) return true;
+                      }
+                      return false;
+                    });
+                  children.classed('children', true);
+                  constructors = svg.selectAll('.keyword')
+                    .filter(d => {
+                      for (let i of constructors) {
+                        if (i.word === d.text) return true;
+                      }
+                      return false;
+                    });
+                  constructors.classed('parent', true);
+                });
             } else {
               svg.selectAll('.focus-keyword').classed('focus-keyword', false);
+              svg.selectAll('.children').classed('children', false);
+              svg.selectAll('.parent').classed('parent', false);
               util.deleteSolar(svg, config);
+              return;
             }
-            svg.selectAll('.children').classed('children', false);
-            svg.selectAll('.parent').classed('parent', false);
-            util.exportCallback({
-                'dblclickword': true,
-                'word': d.text
-              })
-              .then(function(data) {
-                let children = data.children;
-                let constructors = data.constructors;
-                children = children.map(util.getWordByIndex);
-                constructors = constructors.map(d => util.getWordByIndex(d.index));
-                children = svg.selectAll('.keyword')
-                  .filter(d => {
-                    for (let i of children) {
-                      if (i.word === d.text) return true;
-                    }
-                    return false;
-                  });
-                children.classed('children', true);
-                constructors = svg.selectAll('.keyword')
-                  .filter(d => {
-                    for (let i of constructors) {
-                      if (i.word === d.text) return true;
-                    }
-                    return false;
-                  });
-                constructors.classed('parent', true);
-              });
-          });
-        };
-        let ondblclick = function(selections, util, svg) {
-          selections.on('dblclick', function(d, i) {
-            if (d3.event)
-              d3.event.stopPropagation();
-            svg.selectAll('.children').classed('children', false);
-            svg.selectAll('.parent').classed('parent', false);
-            svg.selectAll('.node-inspect').classed('node-inspect', false);
-            d3.select(this).classed('node-inspect', true);
-            let config = {};
-            config.text = d.text;
-            config.rootposition = d.solution;
-            // fetch constructors
-            util.exportCallback({
-                'dblclickword': true,
-                'word': d.text
-              })
-              .then(function(data) {
-                let children = data.children;
-                let constructors = data.constructors;
-                children = children.map(util.getWordByIndex);
-                constructors = constructors.map(d => util.getWordByIndex(d.index));
-                children = svg.selectAll('.keyword')
-                  .filter(d => {
-                    for (let i of children) {
-                      if (i.word === d.text) return true;
-                    }
-                    return false;
-                  });
-                children.classed('children', true);
-                constructors = svg.selectAll('.keyword')
-                  .filter(d => {
-                    for (let i of constructors) {
-                      if (i.word === d.text) return true;
-                    }
-                    return false;
-                  });
-                constructors.classed('parent', true);
-              });
+
           });
         };
         let onmouseover = function(selections, util, svg) {
