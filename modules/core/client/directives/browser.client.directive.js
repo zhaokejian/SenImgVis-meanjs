@@ -128,7 +128,7 @@ angular
               scope.imagesrc = base + data.id;
               scope.caption = data.caption[0];
               scope.closing = 0;
-              scope.closeArrow = 1;
+              scope.closeArrow = 0;
               scope.arrowStyle = { 'top': (image.height / 2) + 'px' };
             });
             expandBrowser(container);

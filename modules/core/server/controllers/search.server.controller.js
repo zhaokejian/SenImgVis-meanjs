@@ -29,7 +29,6 @@ exports.index = function(req, res) {
     .then((words) => {
       data.words = words;
       console.log('get words');
-      console.log(data);
       return query(data, include_word, exclude_word, include_image, exclude_image);
     })
     .then(respondWithResult(res))
