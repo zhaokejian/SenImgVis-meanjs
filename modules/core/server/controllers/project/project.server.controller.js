@@ -7,13 +7,6 @@ var jsonpatch = require('fast-json-patch'),
     Image = require('../../models/image.model'),
     Word = require('../../models/word.model');
 
-// import jsonpatch from 'fast-json-patch';
-// import Image from '../image/image.model';
-// import Word from '../word/word.model';
-// import Xto2d from './project.service';
-// import keyword from './keyword';
-// import reconstruct from './reconstruct.service';
-
 function IsKeyword() {
   let hash = {};
   keyword.forEach(d => hash[d] = 1);

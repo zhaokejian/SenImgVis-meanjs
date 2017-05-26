@@ -15,13 +15,15 @@
 
 <div class="dashboard" ng-class="dashboardvisible === 0 ? 'dashboard-hidden' : '' ">
 	<div class="selection">
-		<!-- select word -->
-		<div class="selection-group">
+		<!-- semanticQuery -->
+		<div class="selection-group border-line">
 			<div class="selection-addon">
-				<span class="title">Select Word</span>
+				<span class="title">Sematic Query</span>
 				<span class="fui-search icon" ng-click="semanticQuery()"></span>
 			</div>
+			<!-- keywords -->
 			<ul class="menu">
+				<div class="title">KeyWords :</div>
 				<li ng-repeat="word in keywords track by $index"><a href="#">
 					{{word[0]}}
 					<span class="action">
@@ -33,17 +35,13 @@
 				<li class="add-word-row" ng-show="!adding_query_word"><span class="fui-plus add-word-icon" ng-click="adding_query_word = true;"></span></li>
 				<li class="add-word-row" ng-show="adding_query_word">
 					<input type="text" value="" placeholder="input" class="form-control add-input" id="add-query-word">
+					<span class="glyphicon glyphicon-ok" id="add-word-submit" ng-click="adding_query_word = false;"></span>
 					<span class="glyphicon glyphicon-remove" ng-click="adding_query_word = false;"></span>
 				</li>
 			</ul>
-		</div>
-		<!-- select image -->
-		<div class="selection-group">
-			<div class="selection-addon">
-				<span class="title">Select Image</span>
-				<span class="fui-search icon" ng-click="semanticQuery()"></span>
-			</div>
+			<!-- keyimage -->
 			<ul class="menu">
+				<div class="title">KeyImages :</div>
 				<li ng-repeat="image in keyimages track by $index">
 					<a href="#" ng-click="locateImage(image[0].id); $event.stopPropagation();">
 						{{image[0].id.split('_')[2]}}
@@ -55,13 +53,15 @@
 				</li>
 			</ul>
 		</div>
-		<!-- word construction: parent -->
+		<!-- word structure -->
 		<div class="selection-group border-line" ng-show="word.text !== ''">
 			<div class="selection-addon">
-				<span class="title">Word Constructors</span>
+				<span class="title">Word Structure</span>
 				<span class="fui-play icon" ng-click="reConstructWord()"></span>
 			</div>
-			<ul class="menu" ng-show="word.parents.length > 0">
+			<!-- word parents -->
+			<ul class="menu">
+				<div class="title">Parents :</div>
 				<li ng-repeat="parent in word.parents track by $index">
 					<a href="#" ng-click="selectWordConstructor($index)" ng-show="!modifying" ng-class="{'border-bottom-line': $index===0 && word.parents.length > 1}">
 						{{parent.word}}
@@ -71,13 +71,9 @@
 					</a>
 				</li>
 			</ul>
-		</div>
-		<!-- word construction: children -->
-		<div class="selection-group" ng-show="word.text !== ''">
-			<div class="selection-addon">
-				<span class="title">Word Children</span>
-			</div>
-			<ul class="menu" ng-show="word.children.length > 0">
+			<!-- word children -->
+			<ul class="menu">
+				<div class="title">Children :</div>
 				<li ng-repeat="child in word.children track by $index">
 					<a href="#">
 						{{child.word}}
@@ -86,13 +82,15 @@
 				</li>
 			</ul>
 		</div>
-		<!-- image construction -->
-		<div class="selection-group .border-line" ng-show="image.id !== ''">
+
+		<!-- image structure -->
+		<div class="selection-group border-line" ng-show="image.id !== ''">
 			<div class="selection-addon">
-				<span class="title">Image Constructors</span>
+				<span class="title">Image Structure</span>
 				<span class="fui-play icon" ng-click="reConstructImage()"></span>
 			</div>
 			<ul class="menu">
+				<div class="title">Constructors :</div>
 				<li ng-repeat="word in image.parents track by $index">
 					<a href="#" ng-click="selectImageConstructor($index)" ng-class="{'border-bottom-line': $index===0 && image.parents.length > 1}">
 						{{word.word}}
@@ -104,11 +102,13 @@
 			</ul>
 		</div>
 	</div>
-	<div class="spinner hidden">
-		<div class="rect1"></div>
-		<div class="rect2"></div>
-		<div class="rect3"></div>
-		<div class="rect4"></div>
-		<div class="rect5"></div>
+	<div class="loading">
+		<div class="spinner hidden">
+			<div class="rect1"></div>
+			<div class="rect2"></div>
+			<div class="rect3"></div>
+			<div class="rect4"></div>
+			<div class="rect5"></div>
+		</div>
 	</div>
 </div>

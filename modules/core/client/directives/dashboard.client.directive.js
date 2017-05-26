@@ -77,11 +77,6 @@
               let msg = response.data;
               let images = database.searchImage(msg.map(d => d.id));
               event.emit(event.SEMANTICQUERYRESULT, images);
-              // scope.images = images;
-              // scope.basepage = 1;
-              // scope.currentpage = 1;
-              // scope.captions = images.map(d => d.caption[0].charAt(0).toUpperCase() + d.caption[0].slice(1));
-              // scope.clickPage(1);
               spinner.classed('hidden', true);
             });
           }
@@ -150,6 +145,7 @@
           let search_input = container.select('#search-keyword');
           let add_query_word = container.select('#add-query-word');
           let search_submit = container.select('.search-submit');
+          let add_query_word_submit = container.select('#add-word-submit');
           let fuilist = container.select('.fui-list');
           let spinner = container.select('.spinner');
           let dashboard = container.select('.dashboard');
@@ -173,8 +169,7 @@
             search_submit.node().click();
           });
           //add query word
-          add_query_word.on('keypress', function() { //enter input
-            if (d3.event.keyCode != 13) return;
+          add_query_word_submit.on('click', function() {
             d3.event.preventDefault();
             let text = add_query_word.node().value;
             if (text.length > 0) {
@@ -183,6 +178,11 @@
               });
             }
             add_query_word.node().value = '';
+          })
+          add_query_word.on('keypress', function() { //enter input
+            if (d3.event.keyCode != 13) return;
+            d3.event.preventDefault();
+            add_query_word_submit.node().click();
           });
 
 
