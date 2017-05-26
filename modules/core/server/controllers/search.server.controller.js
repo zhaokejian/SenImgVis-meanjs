@@ -3,7 +3,7 @@
 var jsonpatch = require('fast-json-patch'),
   cosine = require('compute-cosine-similarity'),
   Image = require('../models/image.model'),
-  Word = require('../modules/word.model');
+  Word = require('../models/word.model');
 
 // Gets a list of Images
 exports.index = function(req, res) {
