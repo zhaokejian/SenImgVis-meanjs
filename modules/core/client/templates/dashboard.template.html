@@ -13,19 +13,13 @@
 	</div>
 </div>
 
-<!-- <div class="dashboard" ng-class="dashboardvisible === 0 ? 'dashboard-hidden' : '' ">
+<div class="dashboard" ng-class="dashboardvisible === 0 ? 'dashboard-hidden' : '' ">
 	<div class="selection">
+		<!-- select word -->
 		<div class="selection-group">
 			<div class="selection-addon">
 				<span class="title">Select Word</span>
 				<span class="fui-search icon" ng-click="semanticQuery()"></span>
-				<div class="spinner hidden">
-					<div class="rect1"></div>
-					<div class="rect2"></div>
-					<div class="rect3"></div>
-					<div class="rect4"></div>
-					<div class="rect5"></div>
-				</div>
 			</div>
 			<ul class="menu">
 				<li ng-repeat="word in keywords track by $index"><a href="#">
@@ -39,9 +33,11 @@
 				<li class="add-word-row" ng-show="!adding_query_word"><span class="fui-plus add-word-icon" ng-click="adding_query_word = true;"></span></li>
 				<li class="add-word-row" ng-show="adding_query_word">
 					<input type="text" value="" placeholder="input" class="form-control add-input" id="add-query-word">
-					<span class="glyphicon glyphicon-remove" ng-click="adding_query_word = false;"></span></li>
+					<span class="glyphicon glyphicon-remove" ng-click="adding_query_word = false;"></span>
+				</li>
 			</ul>
 		</div>
+		<!-- select image -->
 		<div class="selection-group">
 			<div class="selection-addon">
 				<span class="title">Select Image</span>
@@ -59,6 +55,7 @@
 				</li>
 			</ul>
 		</div>
+		<!-- word construction: parent -->
 		<div class="selection-group border-line" ng-show="word.text !== ''">
 			<div class="selection-addon">
 				<span class="title">Word Constructors</span>
@@ -75,6 +72,7 @@
 				</li>
 			</ul>
 		</div>
+		<!-- word construction: children -->
 		<div class="selection-group" ng-show="word.text !== ''">
 			<div class="selection-addon">
 				<span class="title">Word Children</span>
@@ -88,6 +86,7 @@
 				</li>
 			</ul>
 		</div>
+		<!-- image construction -->
 		<div class="selection-group .border-line" ng-show="image.id !== ''">
 			<div class="selection-addon">
 				<span class="title">Image Constructors</span>
@@ -105,4 +104,11 @@
 			</ul>
 		</div>
 	</div>
-</div> -->
+	<div class="spinner hidden">
+		<div class="rect1"></div>
+		<div class="rect2"></div>
+		<div class="rect3"></div>
+		<div class="rect4"></div>
+		<div class="rect5"></div>
+	</div>
+</div>

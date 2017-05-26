@@ -42,7 +42,7 @@
               svg.selectAll('.children').classed('children', false);
               svg.selectAll('.parent').classed('parent', false);
               util.exportCallback({//emit showReconstruct
-                  'showReconstruct': true,
+                  'showWordStructure': true,
                   'word': d.text
                 })
                 .then(function(data) {

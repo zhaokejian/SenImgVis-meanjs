@@ -24,8 +24,8 @@
       addEvent('searchImage');
       addEvent('specifyKeyimage');
       addEvent('specifyKeyword');
-      addEvent('showReconstruct');
-      addEvent('SHOWIMAGECONSTRUCTOR');
+      addEvent('showWordStructure');
+      addEvent('showImageStructure');
       addEvent('SEMANTICQUERYRESULT');
 
       return event;

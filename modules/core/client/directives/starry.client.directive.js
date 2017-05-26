@@ -32,7 +32,7 @@
                 event.emit(event.SHOWIMAGECHANGED, [msg.image]);//show image in browser
                 event.emit(event.SPECIFYKEYIMAGE, msg);
               }
-              if (msg.showReconstruct) {
+              if (msg.showWordStructure) {
                 return $http({
                   url: '/api/word/' + msg.word,
                   method: "GET"
@@ -48,7 +48,7 @@
                     d.word = word.word;
                     return d;
                   });
-                  event.emit(event.SHOWRECONSTRUCT, {
+                  event.emit(event.SHOWWORDSTRUCTURE, {
                     children,
                     constructors,
                     word
@@ -127,7 +127,7 @@
                   return d;
                 });
                 let id = data.id;
-                event.emit(event.SHOWIMAGECONSTRUCTOR, {//show image constructor in searchinterface
+                event.emit(event.SHOWIMAGESTRUCTURE, {//show image constructor in searchinterface
                   constructors,
                   id
                 });
