@@ -79,8 +79,6 @@
         };
         let onmouseover = function(selections, util, svg) {
           selections.on('mouseover', function(d, i) {
-            console.log('mouseover keyword');
-            console.log(d);
             let config = {},
               radius = 500;
             config.center = d.solution;

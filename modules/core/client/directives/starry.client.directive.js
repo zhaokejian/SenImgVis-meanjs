@@ -30,7 +30,7 @@
             let exportCallback = function(msg) {
               if (msg.clickimage) {//click image in solar
                 event.emit(event.SHOWIMAGECHANGED, [msg.image]);//show image in browser
-                event.emit(event.SPECIFYKEYIMAGE, msg);
+                // event.emit(event.SPECIFYKEYIMAGE, msg);
               }
               if (msg.showWordStructure) {
                 return $http({
@@ -56,9 +56,6 @@
                   return data;
                 });
               }
-              if (msg.reconstructword) {
-                console.log(msg.reconstructword);
-              }
             };
             assignStyle(backcanvas.node(), {
               backgroundColor: '#000'
@@ -82,6 +79,30 @@
               width: svg.node().clientWidth,
               height: svg.node().clientHeight
             });
+            //click svg (choose image point) & searchImage
+            let emitter = (d) => {
+              event.emit(event.SHOWIMAGECHANGED, d);
+              if (!d[0]) return;
+              $http({
+                url: '/api/image/' + d[0].id,//get one image
+                method: "GET"
+              }).then(response => {
+                let msg = response.data;
+                let data = msg[0];
+                let util = starry.interfaces();
+                let constructors = data.constructors.map(d => {
+                  let word = util.getWordByIndex(d.index);
+                  d.word = word.word;
+                  return d;
+                });
+                let id = data.id;
+                event.emit(event.SHOWIMAGESTRUCTURE, {//show image constructor in searchinterface
+                  constructors,
+                  id
+                });
+                return msg;
+              });
+            };
             // New data, $onInit
             event.on(scope, event.DATASETCHANGED, function(msg) {
               starry.configure({
@@ -106,34 +127,12 @@
             // New search image
             event.on(scope, event.SEARCHIMAGE, function(msg) {
               let util = starry.interfaces();
-              // console.log(msg);
+              console.log(msg);
               starry.jumpToImage(msg, svg);
+              let imageElem = util.searchImage(msg.id);
+              emitter([imageElem._data_]);
             });
 
-            //click svg emitter (choose image point)
-            let emitter = (d) => {
-              event.emit(event.SHOWIMAGECHANGED, d);
-              if (!d[0]) return;
-              $http({
-                url: '/api/image/' + d[0].id,//get one image
-                method: "GET"
-              }).then(response => {
-                let msg = response.data;
-                let data = msg[0];
-                let util = starry.interfaces();
-                let constructors = data.constructors.map(d => {
-                  let word = util.getWordByIndex(d.index);
-                  d.word = word.word;
-                  return d;
-                });
-                let id = data.id;
-                event.emit(event.SHOWIMAGESTRUCTURE, {//show image constructor in searchinterface
-                  constructors,
-                  id
-                });
-                return msg;
-              });
-            };
             svg.call(Interaction.svg.ondrag, starry);
             svg.call(Interaction.svg.onclick, starry, emitter);
             svg.call(Interaction.svg.onmousewheel, starry);

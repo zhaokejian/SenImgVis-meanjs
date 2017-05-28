@@ -74,7 +74,7 @@ angular
         };
         scope.clickImage = function() {
           let data = scope.imageBuckets[scope.imageIndex];
-          event.emit(event.SEARCHIMAGE, { id: data.id });
+          // event.emit(event.SEARCHIMAGE, { id: data.id });
           event.emit(event.SPECIFYKEYIMAGE, {id: data.id, image: data});
         };
         let container = d3.select(element[0]);
@@ -99,9 +99,12 @@ angular
         // New data, show one image
         event.on(scope, event.SHOWIMAGECHANGED, function(msg) {
           // console.log(msg);
+          console.log("show image changed");
+          console.log(msg);
           if(!msg || !msg[0]) return;
           scope.imageIndex = 0;
           let data = msg[scope.imageIndex];
+          console.log(data);
           scope.imageBuckets = [msg[0]];
           let image = new Image();
           image.src = base + data.id;
