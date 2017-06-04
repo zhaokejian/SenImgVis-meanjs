@@ -29,8 +29,7 @@
             let svg = d3.select(element[0]).select('#starry-svg');
             let exportCallback = function(msg) {
               if (msg.clickimage) {//click image in solar
-                event.emit(event.SHOWIMAGECHANGED, [msg.image]);//show image in browser
-                // event.emit(event.SPECIFYKEYIMAGE, msg);
+                emitter([msg.image]);//showImageStructure & showimageChanged
               }
               if (msg.showWordStructure) {
                 return $http({

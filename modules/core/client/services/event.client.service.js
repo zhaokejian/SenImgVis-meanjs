@@ -26,7 +26,7 @@
       addEvent('specifyKeyword');
       addEvent('showWordStructure');
       addEvent('showImageStructure');
-      addEvent('SEMANTICQUERYRESULT');
+      addEvent('SematicQueryResult');
 
       return event;
     }]);
