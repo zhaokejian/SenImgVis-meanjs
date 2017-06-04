@@ -82,6 +82,7 @@ angular
         let close = container.select('.close');
         expand.on('click', function() {
           if(!scope.imageBuckets.length) return;
+
           expandBrowser(container);
           scope.safeApply(function() {
             scope.closing = 0;
@@ -94,7 +95,11 @@ angular
           scope.safeApply(function () {
             scope.closing = 1;
             scope.closeArrow = 1;
+            scope.imageBuckets = [];
           });
+          //clear image structure
+          event.emit(event.SHOWIMAGESTRUCTURE, {id: '', constructors: []});
+          event.emit(event.CLEARIMAGEPOINT);
         });
         // New data, show one image
         event.on(scope, event.SHOWIMAGECHANGED, function(msg) {

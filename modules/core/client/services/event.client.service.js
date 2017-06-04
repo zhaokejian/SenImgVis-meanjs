@@ -26,7 +26,8 @@
       addEvent('specifyKeyword');
       addEvent('showWordStructure');
       addEvent('showImageStructure');
-      addEvent('SematicQueryResult');
+      addEvent('sematicQueryResult');
+      addEvent('clearImagePoint');
 
       return event;
     }]);

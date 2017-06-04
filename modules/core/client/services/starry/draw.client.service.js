@@ -72,6 +72,10 @@
               svg.selectAll('.children').classed('children', false);
               svg.selectAll('.parent').classed('parent', false);
               util.deleteSolar(svg, config);
+              util.exportCallback({
+                'showWordStructure': true,
+                'word': false
+              });
               return;
             }
 

@@ -196,26 +196,53 @@
 
           event.on(scope, event.SHOWWORDSTRUCTURE, function(msg) {
             // console.log(msg);
-            scope.word.text = msg.word;
-            scope.word.children = msg.children;
-            scope.word.parents = msg.constructors;
-            scope.word.parentIndex = 0;
-            //reset scope.image
-            scope.image.id = '';
-            scope.image.parents = [];
-            scope.image.parentIndex = -1;
+            if(msg.word === ''){
+              //reset scope.word
+              scope.safeApply(function(){
+                scope.word = {
+                  children: [],
+                  parents: [],
+                  text: '',
+                  parentIndex: -1
+                };
+              });
+              return;
+            }
+            else {
+              scope.word.text = msg.word;
+              scope.word.children = msg.children;
+              scope.word.parents = msg.constructors;
+              scope.word.parentIndex = 0;
+              //reset scope.image
+              scope.image.id = '';
+              scope.image.parents = [];
+              scope.image.parentIndex = -1;
+            }
           });
 
           event.on(scope, event.SHOWIMAGESTRUCTURE, function(msg) {
             // console.log(msg);
-            scope.image.parents = msg.constructors;
-            scope.image.id = msg.id;
-            scope.image.parentIndex = 0;
-            //reset scope.word
-            scope.word.text = '';
-            scope.word.children = [];
-            scope.word.parents = [];
-            scope.word.parentIndex = -1;
+            if(msg.id === ''){
+              //reset scope.word
+              scope.safeApply(function(){
+                scope.image = {
+                  parents: [],
+                  id: '',
+                  parentIndex: -1
+                };
+              });
+              return;
+            }
+            else {
+              scope.image.parents = msg.constructors;
+              scope.image.id = msg.id;
+              scope.image.parentIndex = 0;
+              //reset scope.word
+              scope.word.text = '';
+              scope.word.children = [];
+              scope.word.parents = [];
+              scope.word.parentIndex = -1;
+            }
           });
 
         }

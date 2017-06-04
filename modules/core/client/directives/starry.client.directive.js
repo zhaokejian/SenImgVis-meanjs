@@ -32,6 +32,17 @@
                 emitter([msg.image]);//showImageStructure & showimageChanged
               }
               if (msg.showWordStructure) {
+                if(!msg.word) {//clear word structure
+                  let word = '';
+                  let children = [];
+                  let constructors = [];
+                  event.emit(event.SHOWWORDSTRUCTURE, {
+                    children,
+                    constructors,
+                    word
+                  });
+                  return 'clear';
+                }
                 return $http({
                   url: '/api/word/' + msg.word,
                   method: "GET"
@@ -130,6 +141,10 @@
               starry.jumpToImage(msg, svg);
               let imageElem = util.searchImage(msg.id);
               emitter([imageElem._data_]);
+            });
+            //clear image-point in svg
+            event.on(scope, event.CLEARIMAGEPOINT, function() {
+              svg.select('.all-container').selectAll('.click-image-point').remove();
             });
 
             svg.call(Interaction.svg.ondrag, starry);
