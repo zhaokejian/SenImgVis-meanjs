@@ -222,7 +222,7 @@ exports.ReconstructWord = function(req, res) {
       result.word = data.word.map((d, i) => {
         return { _id: d._id, word: d.word, constructors: wordConstructors[i] };
       });
-      updateWord(result.word);
+
       let newsolution = reconstruct.reconstructWord(wordConstructors, imageConstructors, wordProjections);
       for (let i = 0; i < newsolution.image.length; i++) {
         result.image[i].solution = newsolution.image[i];
@@ -231,6 +231,7 @@ exports.ReconstructWord = function(req, res) {
       for (let i = 0; i < newsolution.word.length; i++) {
         result.word[i].solution = newsolution.word[i];
       }
+      updateWord(result.word);
       return result;
     })
     .then(respondWithResult(res))
@@ -253,7 +254,7 @@ exports.ReconstructImage = function(req, res) {
     query.constructors = [];
   }
   let image_projection = { 'id': 1, 'constructors': 1, 'caption': 1, 'index': 1 };
-  let word_projection = { 'word': 1, 'constructors': 1, 'solution': 1, 'index': 1 };
+  let word_projection = { 'word': 1, 'constructors': 1, 'solution_new': 1, 'index': 1 };
   // let isKeyword = IsKeyword();
   let data = {};
   return Image.find(null, image_projection).exec()
@@ -275,7 +276,9 @@ exports.ReconstructImage = function(req, res) {
           imageIndex = i;
       }
       console.log(imageIndex);
-      let wordPositions = data.word.map(d => d.solution);
+      let wordPositions = data.word.map(d => d.solution_new);
+      console.log("wordPositions in reConstructImage");
+      console.log(wordPositions);
       let imageConstructors = data.image.map(d => d.constructors);
       let wordConstructors = data.word.map(d => d.constructors);
       imageConstructors[imageIndex] = query.constructors;
@@ -287,6 +290,7 @@ exports.ReconstructImage = function(req, res) {
         return { _id: d._id, word: d.word, constructors: wordConstructors[i] };
       });
       updateImage(result.image);
+      // let newsolution = reconstruct.reconstructWord(wordConstructors, imageConstructors, wordProjections);
       let newsolution = reconstruct.reConstructImage(wordPositions, imageConstructors);
       for (let i = 0; i < newsolution.image.length; i++) {
         result.image[i].solution = newsolution.image[i];
@@ -310,8 +314,9 @@ function updateImage(images) {
 }
 function updateWord(words) {
   for (let d of words) {
-    Word.findByIdAndUpdate(d._id, { $set: { 'constructors': d.constructors } }, function (error) {
+    Word.findByIdAndUpdate(d._id, { $set: { 'constructors': d.constructors, 'solution_new': d.solution } }, function (error) {
       if (error) console.log(error);
     });
   }
+  console.log("updateWord");
 }

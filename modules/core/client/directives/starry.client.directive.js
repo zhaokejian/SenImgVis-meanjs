@@ -126,7 +126,9 @@
               starry.init();
               starry.genVirtualElements();
               starry.genInterfaces(exportCallback);
+              console.time('renderInit');
               starry.renderInit();
+              console.timeEnd('renderInit');
             });
             // New search keyword
             event.on(scope, event.SEARCHKEYWORD, function(msg) {

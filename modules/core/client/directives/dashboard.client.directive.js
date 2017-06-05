@@ -67,13 +67,15 @@
           //sematic query
           scope.semanticQuery = function() {
             let query = obtainQuery(scope.keywords, scope.keyimages);
-            console.log(query);
+            // console.log(query);
             spinner.classed('hidden', false);
+            console.time("http_get::/api/search");
             $http({
               url: '/api/search',
               method: "GET",
               params: query
             }).then(response => {
+              console.timeEnd("http_get::/api/search");
               let msg = response.data;
               let images = database.searchImage(msg.map(d => d.id));
               event.emit(event.SEMANTICQUERYRESULT, images);
@@ -101,11 +103,13 @@
             }
             spinner.classed('hidden', false);
             console.log('reconstruct', data);
+            console.time("http_get::/api/project/word/");
             return $http({
               url: '/api/project/word/' + data.text,
               method: "GET",
               params: data
             }).then(response => {
+              console.timeEnd("http_get::/api/project/word/");
               let msg = response.data;
               console.log(msg);
               event.emit(event.DATASETCHANGED, msg);
@@ -127,11 +131,13 @@
             }
             spinner.classed('hidden', false);
             console.log('reconstruct', data);
+            console.time("http_get::/api/project/image/");
             return $http({
               url: '/api/project/image/' + data.id,
               method: "GET",
               params: data
             }).then(response => {
+              console.timeEnd("http_get::/api/project/image/");
               let msg = response.data;
               console.log(msg);
               event.emit(event.DATASETCHANGED, msg);

@@ -12,7 +12,8 @@ var WordSchema = new mongoose.Schema({
   index: Number,
   origin_constructors: [],
   colorhistogram_solution_step1: [Number],
-  solution_step1: [Number]
+  solution_step1: [Number],
+  solution_new: [Number]
 }, { collection: 'word' });
 
 module.exports = mongoose.model('Word', WordSchema);

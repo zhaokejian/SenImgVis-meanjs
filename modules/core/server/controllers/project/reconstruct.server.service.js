@@ -384,6 +384,7 @@ result.reconstructWord = function (wordConstructors, imageConstructors, wordProj
 };
 
 result.reConstructImage = function (wordPositions_, imageConstructors) {
+  console.log("reConstructImage");
   let imagePositions_ = reconstructImagePositions(wordPositions_, imageConstructors);
   return { image: imagePositions_, word: wordPositions_ };
 }
