@@ -146,6 +146,29 @@
             event.on(scope, event.CLEARIMAGEPOINT, function() {
               svg.select('.all-container').selectAll('.click-image-point').remove();
             });
+            //highlight images after semanticQuery
+            event.on(scope, event.SEMANTICQUERYRESULT, function(images) {
+              let util = starry.interfaces();
+              let imagesElem = [];
+              for (var i = 0; i < 10; i++) {
+                let imageElem = util.searchImage(images[i].id);
+                if(imageElem._data_.solution[0] !== null){
+                  imagesElem.push(imageElem);
+                }
+              }
+              // console.log(imagesElem);
+              svg.select('.all-container').selectAll('.click-image-point').remove();
+              svg.select('.all-container')
+                .selectAll('.click-image-point')
+                .data(imagesElem)
+                .enter()
+                .append('circle')
+                .classed('click-image-point', true)
+                .attr('cx', function(d){return d.solution[0];})
+                .attr('cy', function(d){return d.solution[1];})
+                .attr('r', 3)
+                .attr('fill', '#fff');
+            });
 
             svg.call(Interaction.svg.ondrag, starry);
             svg.call(Interaction.svg.onclick, starry, emitter);
